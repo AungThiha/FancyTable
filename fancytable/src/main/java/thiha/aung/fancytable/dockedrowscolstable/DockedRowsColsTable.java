@@ -931,7 +931,7 @@ public class DockedRowsColsTable extends ViewGroup {
         view.setTag(R.id.tag_row, row);
         view.setTag(R.id.tag_column, column);
         view.measure(MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY));
-        addView(view, row, column);
+        addTableView(view, row, column);
         return view;
     }
 
@@ -939,9 +939,9 @@ public class DockedRowsColsTable extends ViewGroup {
     private void addTableView(View view, int row, int column) {
         if (row < numDockedRows && column < numDockedColumns){
             addView(view);
-        } else if (row < numDockedRows) {
-            addView(view, getChildCount() - numDockedRows);
-        } else {
+        } else if(row < numDockedRows || column < numDockedColumns){
+            addView(view, getChildCount() - (numDockedRows * numDockedColumns));
+        }else {
             addView(view, 0);
         }
     }
