@@ -96,6 +96,12 @@ public interface DockedRowsColsTableAdapter {
      */
     int getHeight(int row);
 
+    boolean isHeader(int row);
+
+    boolean isRowShadowShown();
+
+    boolean isColumnShadowShown();
+
     /**
      * Get the type of View that will be created by
      * {@link #getView(int, int, View, ViewGroup)} for the specified item.

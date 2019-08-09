@@ -3,7 +3,6 @@ package thiha.aung.fancytable.dockedrowscolstable;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -165,31 +164,6 @@ public class DockedRowsColsTable extends ViewGroup {
     }
 
     @Override
-    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-        final boolean ret;
-
-        final Integer row = (Integer) child.getTag(R.id.tag_row);
-        final Integer column = (Integer) child.getTag(R.id.tag_column);
-
-        if (row == null || (row < numDockedRows && column < numDockedRows)) {
-            ret = super.drawChild(canvas, child, drawingTime);
-        } else {
-            canvas.save();
-            if (row < numDockedRows) {
-                canvas.clipRect(widths[0], 0, canvas.getWidth(), canvas.getHeight());
-            } else if (column < numDockedColumns) {
-                canvas.clipRect(0, heights[0], canvas.getWidth(), canvas.getHeight());
-            } else {
-                canvas.clipRect(widths[0], heights[0], canvas.getWidth(), canvas.getHeight());
-            }
-
-            ret = super.drawChild(canvas, child, drawingTime);
-            canvas.restore();
-        }
-        return ret;
-    }
-
-    @Override
     public void removeView(View view) {
         super.removeView(view);
 
@@ -215,10 +189,15 @@ public class DockedRowsColsTable extends ViewGroup {
                 right = Math.min(width, sumArray(widths));
                 bottom = Math.min(height, sumArray(heights));
 
-                int columnShadowLeft = sumArray(widths, 0, numDockedColumns);
-                addShadow(shadows[0], columnShadowLeft, 0, columnShadowLeft + shadowSize, bottom);
-                int rowShadowTop = sumArray(heights, 0, numDockedRows);
-                addShadow(shadows[1], 0, rowShadowTop, right, rowShadowTop + shadowSize);
+                if (adapter.isColumnShadowShown()){
+                    int columnShadowLeft = sumArray(widths, 0, numDockedColumns);
+                    addShadow(shadows[0], columnShadowLeft, 0, columnShadowLeft + shadowSize, bottom);
+                }
+
+                if (adapter.isRowShadowShown()){
+                    int rowShadowTop = sumArray(heights, 0, numDockedRows);
+                    addShadow(shadows[1], 0, rowShadowTop, right, rowShadowTop + shadowSize);
+                }
                 //                addShadow(shadows[2], right - shadowSize, 0, right, bottom);
                 //                addShadow(shadows[3], 0, bottom - shadowSize, right, bottom);
 
@@ -232,12 +211,20 @@ public class DockedRowsColsTable extends ViewGroup {
                     bottom = top + heights[i];
                     left = 0;
                     List<View> list = new ArrayList<>();
-                    for (int j = 0; j < columnCount && left < width; j++) {
-                        right = left + widths[j];
-                        final View view = makeAndSetup(i, j, left, top, right, bottom);
+
+                    if (adapter.isHeader(i)){
+                        final View view = makeAndSetup(i, 0, 0, top, width, bottom);
                         list.add(view);
-                        left = right;
+                    }else{
+                        for (int j = 0; j < columnCount && left < width; j++) {
+                            right = left + widths[j];
+                            final View view = makeAndSetup(i, j, left, top, right, bottom);
+                            list.add(view);
+                            left = right;
+                        }
                     }
+
+
                     bodyViewTable.add(list);
                     top = bottom;
                 }
@@ -363,7 +350,7 @@ public class DockedRowsColsTable extends ViewGroup {
             // no op
         } else if (scrollX > 0) {
             while (widths[firstScrollableColumn] < scrollX) {
-                List<View> rowViewList = bodyViewTable.get(0);
+                List<View> rowViewList = getRowViewList();
                 if (!rowViewList.isEmpty()) {
                     removeLeft();
                 }
@@ -375,7 +362,7 @@ public class DockedRowsColsTable extends ViewGroup {
             }
         } else {
 
-            List<View> rowViewList = bodyViewTable.get(0);
+            List<View> rowViewList = getRowViewList();
 
             int currentLastColumn = firstScrollableColumn - numDockedColumns + rowViewList.size() - 1;
             Log.d(DockedRowsColsTable.class.getSimpleName(),
@@ -447,6 +434,16 @@ public class DockedRowsColsTable extends ViewGroup {
         shadowsVisibility();
 
         awakenScrollBars();
+    }
+
+    private List<View> getRowViewList(){
+        for (List<View > list : bodyViewTable){
+            // TODO find a better way to check header
+            if (list.size() > 1){
+                return list;
+            }
+        }
+        throw new RuntimeException("This should never be reached. It's a header. header has only one column");
     }
 
     /*
@@ -607,7 +604,7 @@ public class DockedRowsColsTable extends ViewGroup {
     }
 
     private int getFilledWidth() {
-        List<View> rowViewList = bodyViewTable.get(0);
+        List<View> rowViewList = getRowViewList();
         int columnSize = rowViewList.size();
         int firstRemovedRight = columnSize + firstScrollableColumn - numDockedColumns;
         Log.d(DockedRowsColsTable.class.getSimpleName(),
@@ -638,8 +635,7 @@ public class DockedRowsColsTable extends ViewGroup {
     }
 
     private void addRight() {
-        List<View> rowViewList = bodyViewTable.get(0);
-        final int index = rowViewList.size();
+        final int index = getRowViewList().size();
         final int column = firstScrollableColumn - numDockedColumns + index;
         addLeftOrRight(column, index);
     }
@@ -658,14 +654,18 @@ public class DockedRowsColsTable extends ViewGroup {
 
         for (row = 0; row < numDockedRows; row++) {
             list = bodyViewTable.get(row);
-            view = makeView(row, column, widths[column], heights[row]);
-            list.add(index, view);
+            if (!adapter.isHeader(row)){
+                view = makeView(row, column, widths[column], heights[row]);
+                list.add(index, view);
+            }
         }
 
         for (row = firstScrollableRow; row < bodyViewTable.size() + firstScrollableRow - numDockedRows; row++) {
             list = bodyViewTable.get(row - firstScrollableRow + numDockedRows);
-            view = makeView(row, column, widths[column], heights[row]);
-            list.add(index, view);
+            if (!adapter.isHeader(row)){
+                view = makeView(row, column, widths[column], heights[row]);
+                list.add(index, view);
+            }
         }
 
     }
@@ -673,17 +673,23 @@ public class DockedRowsColsTable extends ViewGroup {
     private void addTopAndBottom(int row, int index) {
         View view;
         List<View> list = new ArrayList<>();
-        List<View> rowViewList = bodyViewTable.get(0);
-        int column;
+        List<View> rowViewList = getRowViewList();
 
-        for (column = 0; column < numDockedColumns; column++) {
-            view = makeView(row, column, widths[column], heights[row]);
+        if (adapter.isHeader(row)){
+            view = makeView(row, 0, width, heights[row]);
             list.add(view);
-        }
+        } else {
+            int column;
 
-        for (column = firstScrollableColumn; column < rowViewList.size() + firstScrollableColumn - numDockedColumns; column++) {
-            view = makeView(row, column, widths[column], heights[row]);
-            list.add(view);
+            for (column = 0; column < numDockedColumns; column++) {
+                view = makeView(row, column, widths[column], heights[row]);
+                list.add(view);
+            }
+
+            for (column = firstScrollableColumn; column < rowViewList.size() + firstScrollableColumn - numDockedColumns; column++) {
+                view = makeView(row, column, widths[column], heights[row]);
+                list.add(view);
+            }
         }
 
         bodyViewTable.add(index, list);
@@ -698,7 +704,7 @@ public class DockedRowsColsTable extends ViewGroup {
     }
 
     private void removeRight() {
-        List<View> rowViewList = bodyViewTable.get(0);
+        List<View> rowViewList = getRowViewList();
         removeLeftOrRight(rowViewList.size() - 1);
     }
 
@@ -708,7 +714,11 @@ public class DockedRowsColsTable extends ViewGroup {
 
     private void removeLeftOrRight(int position) {
         for (List<View> list : bodyViewTable) {
-            removeView(list.remove(position));
+            // size more than 1 is a header
+            // shouldn't remove a header
+            if (list.size() > 1){
+                removeView(list.remove(position));
+            }
         }
     }
 
@@ -734,19 +744,24 @@ public class DockedRowsColsTable extends ViewGroup {
             bottom = top + heights[row];
             left = scrollStartLeft - scrollX;
             columnCells = bodyViewTable.get(row);
-            for (column = firstScrollableColumn; column < columnCells.size() + firstScrollableColumn - numDockedColumns; column++) {
-                view = columnCells.get(column - firstScrollableColumn + numDockedColumns);
-                right = left + widths[column];
-                view.layout(left, top, right, bottom);
-                Log.d(DockedRowsColsTable.class.getSimpleName(),
-                        String.format(
-                                "columnIndex=%d, left=%d, right=%d",
-                                column,
-                                left,
-                                right
-                        )
-                );
-                left = right;
+            if (adapter.isHeader(row)){
+                view = columnCells.get(0);
+                view.layout(0, top, width, bottom);
+            } else {
+                for (column = firstScrollableColumn; column < columnCells.size() + firstScrollableColumn - numDockedColumns; column++) {
+                    view = columnCells.get(column - firstScrollableColumn + numDockedColumns);
+                    right = left + widths[column];
+                    view.layout(left, top, right, bottom);
+                    Log.d(DockedRowsColsTable.class.getSimpleName(),
+                            String.format(
+                                    "columnIndex=%d, left=%d, right=%d",
+                                    column,
+                                    left,
+                                    right
+                            )
+                    );
+                    left = right;
+                }
             }
             top = bottom;
         }
@@ -757,11 +772,16 @@ public class DockedRowsColsTable extends ViewGroup {
             bottom = top + heights[row];
             left = 0;
             columnCells = bodyViewTable.get(row - firstScrollableRow + numDockedRows);
-            for (column = 0; column < numDockedColumns; column++) {
-                view = columnCells.get(column);
-                right = left + widths[column];
-                view.layout(left, top, right, bottom);
-                left = right;
+            if (adapter.isHeader(row)){
+                view = columnCells.get(0);
+                view.layout(0, top, width, bottom);
+            } else {
+                for (column = 0; column < numDockedColumns; column++) {
+                    view = columnCells.get(column);
+                    right = left + widths[column];
+                    view.layout(left, top, right, bottom);
+                    left = right;
+                }
             }
             top = bottom;
         }
@@ -772,11 +792,16 @@ public class DockedRowsColsTable extends ViewGroup {
             bottom = top + heights[row];
             left = scrollStartLeft - scrollX;
             columnCells = bodyViewTable.get(row - firstScrollableRow + numDockedRows);
-            for (column = firstScrollableColumn; column < columnCells.size() + firstScrollableColumn - numDockedColumns; column++) {
-                view = columnCells.get(column - firstScrollableColumn + numDockedColumns);
-                right = left + widths[column];
-                view.layout(left, top, right, bottom);
-                left = right;
+            if (adapter.isHeader(row)){
+                view = columnCells.get(0);
+                view.layout(0, top, width, bottom);
+            } else {
+                for (column = firstScrollableColumn; column < columnCells.size() + firstScrollableColumn - numDockedColumns; column++) {
+                    view = columnCells.get(column - firstScrollableColumn + numDockedColumns);
+                    right = left + widths[column];
+                    view.layout(left, top, right, bottom);
+                    left = right;
+                }
             }
             top = bottom;
         }

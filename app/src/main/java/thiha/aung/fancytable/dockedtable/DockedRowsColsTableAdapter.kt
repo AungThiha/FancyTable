@@ -36,6 +36,14 @@ class DockedRowsColsTableAdapter(
 
     override fun getNumDockedColumns() = numDockedCols
 
+    override fun isHeader(row: Int): Boolean {
+        return row % 5 == 0
+    }
+
+    override fun isRowShadowShown() = true
+
+    override fun isColumnShadowShown() = false
+
     override fun getView(row: Int, column: Int, convertView: View?, parent: ViewGroup): View {
         return when (getItemViewType(row, column)) {
             TYPE_NORMAL -> {
