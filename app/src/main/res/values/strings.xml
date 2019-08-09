@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Sample</string>
+    <string name="docked_rows_cols_table">Docked Rows Cols Table</string>
+</resources>
