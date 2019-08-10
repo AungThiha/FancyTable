@@ -939,7 +939,7 @@ public class DockedRowsColsTable extends ViewGroup {
     private void addTableView(View view, int row, int column) {
         if (row < numDockedRows && column < numDockedColumns){
             addView(view);
-        } else if(row < numDockedRows || column < numDockedColumns){
+        } else if(row < numDockedRows || column < numDockedColumns && !adapter.isHeader(row)){
             addView(view, getChildCount() - (numDockedRows * numDockedColumns));
         }else {
             addView(view, 0);

@@ -1,12 +1,10 @@
-package thiha.aung.fancytable.dockedtable
+package thiha.aung.fancytable.sample
 
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import thiha.aung.fancytable.R
 import thiha.aung.fancytable.dockedrowscolstable.BaseDockedRowsColsTableAdapter
-import thiha.aung.fancytable.inflate
 import kotlin.math.roundToInt
 
 class DockedRowsColsTableAdapter(

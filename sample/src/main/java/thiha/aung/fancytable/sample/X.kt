@@ -1,4 +1,4 @@
-package thiha.aung.fancytable
+package thiha.aung.fancytable.sample
 
 import android.view.LayoutInflater
 import android.view.View

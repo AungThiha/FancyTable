@@ -1,10 +1,9 @@
-package thiha.aung.fancytable.dockedtable
+package thiha.aung.fancytable.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_docked_rows_cols_table.*
-import thiha.aung.fancytable.R
 
 class DockedRowsColsTableActivity : AppCompatActivity() {
 
