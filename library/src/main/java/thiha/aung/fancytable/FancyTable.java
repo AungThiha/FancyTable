@@ -349,11 +349,13 @@ public class FancyTable extends ViewGroup {
          * have created the views from the top right corner on the X part and we
          * will have eliminated to generate the right at the Y.
          */
+        List<View> rowViewList = getRowViewList();
         if (scrollX == 0) {
             // no op
+        } else if (rowViewList.size() < numDockedColumns) {
+            scrollY = 0;
         } else if (scrollX > 0) {
             while (widths[firstScrollableColumn] < scrollX) {
-                List<View> rowViewList = getRowViewList();
                 if (!rowViewList.isEmpty()) {
                     removeLeft();
                 }
@@ -364,8 +366,6 @@ public class FancyTable extends ViewGroup {
                 addRight();
             }
         } else {
-
-            List<View> rowViewList = getRowViewList();
 
             int currentLastColumn = firstScrollableColumn - numDockedColumns + rowViewList.size() - 1;
             Log.d(FancyTable.class.getSimpleName(),
@@ -398,6 +398,8 @@ public class FancyTable extends ViewGroup {
 
         if (scrollY == 0) {
             // no op
+        } else if (bodyViewTable.size() < numDockedRows) {
+            scrollY = 0;
         } else if (scrollY > 0) {
             while (heights[firstScrollableRow] < scrollY) {
                 if (!bodyViewTable.isEmpty()) {
@@ -746,7 +748,7 @@ public class FancyTable extends ViewGroup {
 
         // reposition fixed rows
         top = 0;
-        for (row = 0; row < numDockedRows; row++) {
+        for (row = 0; row < numDockedRows && row < bodyViewTable.size(); row++) {
             bottom = top + heights[row];
             left = scrollStartLeft - scrollX;
             columnCells = bodyViewTable.get(row);
