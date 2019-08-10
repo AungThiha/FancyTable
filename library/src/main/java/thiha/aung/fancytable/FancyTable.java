@@ -136,8 +136,8 @@ public class FancyTable extends ViewGroup {
         scrollX = 0;
         scrollY = 0;
 
-        firstScrollableColumn = adapter.getNumDockedColumns();
         firstScrollableRow = adapter.getNumDockedRows();
+        firstScrollableColumn = adapter.getNumDockedColumns();
 
         needRelayout = true;
         requestLayout();

@@ -1,16 +1,32 @@
 package thiha.aung.fancytable.sample
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_docked_rows_cols_table.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 class FancyTableActivity : AppCompatActivity() {
 
     companion object {
-        const val NUM_DOCKED_ROWS = "num_docked_rows"
-        const val NUM_DOCKED_COLS = "num_docked_cols"
-        const val ENABLE_ONE_COL_ROWS = "enable_one_col_rows"
+
+        const val NUM_DOCKED_ROWS = "NUM_DOCKED_ROWS"
+        const val NUM_DOCKED_COLS = "NUM_DOCKED_COLS"
+        const val ENABLE_ONE_COL_ROWS = "ENABLE_ONE_COL_ROWS"
+
+        fun createIntent(
+            context: Context,
+            numberDockedRows: Int,
+            numberDockedCols: Int,
+            enableOneColRows: Boolean
+        ) = Intent(context, FancyTableActivity::class.java).apply {
+            putExtra(NUM_DOCKED_ROWS, numberDockedRows)
+            putExtra(NUM_DOCKED_COLS, numberDockedCols)
+            putExtra(ENABLE_ONE_COL_ROWS, enableOneColRows)
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +39,8 @@ class FancyTableActivity : AppCompatActivity() {
         }
 
         with(intent) {
-            tbl.adapter = FancyTableAdapter(this@FancyTableActivity,
+            tbl.adapter = FancyTableAdapter(
+                this@FancyTableActivity,
                 getIntExtra(NUM_DOCKED_ROWS, 0),
                 getIntExtra(NUM_DOCKED_COLS, 0),
                 getBooleanExtra(ENABLE_ONE_COL_ROWS, false)
