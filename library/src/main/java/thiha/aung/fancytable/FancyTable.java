@@ -350,10 +350,8 @@ public class FancyTable extends ViewGroup {
          * will have eliminated to generate the right at the Y.
          */
         List<View> rowViewList = getRowViewList();
-        if (scrollX == 0) {
+        if (scrollX == 0 || rowViewList.size() < numDockedColumns) {
             // no op
-        } else if (rowViewList.size() < numDockedColumns) {
-            scrollY = 0;
         } else if (scrollX > 0) {
             while (widths[firstScrollableColumn] < scrollX) {
                 if (!rowViewList.isEmpty()) {
@@ -396,10 +394,8 @@ public class FancyTable extends ViewGroup {
             }
         }
 
-        if (scrollY == 0) {
+        if (scrollY == 0 || bodyViewTable.size() < numDockedRows) {
             // no op
-        } else if (bodyViewTable.size() < numDockedRows) {
-            scrollY = 0;
         } else if (scrollY > 0) {
             while (heights[firstScrollableRow] < scrollY) {
                 if (!bodyViewTable.isEmpty()) {
@@ -784,7 +780,7 @@ public class FancyTable extends ViewGroup {
                 view = columnCells.get(0);
                 view.layout(0, top, width, bottom);
             } else {
-                for (column = 0; column < numDockedColumns; column++) {
+                for (column = 0; column < numDockedColumns && column < columnCells.size(); column++) {
                     view = columnCells.get(column);
                     right = left + widths[column];
                     view.layout(left, top, right, bottom);
