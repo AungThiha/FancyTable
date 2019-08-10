@@ -25,6 +25,12 @@ public interface DockedRowsColsTableAdapter {
     int IGNORE_ITEM_VIEW_TYPE = -1;
 
     /**
+     * Used as a tag on headers
+     * Makes it easy to check if a view is a header
+    * */
+    String HEADER = "header";
+
+    /**
      * Register an observer that is called when changes happen to the data used
      * by this adapter.
      *

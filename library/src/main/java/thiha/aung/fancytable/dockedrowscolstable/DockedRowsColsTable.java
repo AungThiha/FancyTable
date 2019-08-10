@@ -18,6 +18,8 @@ import thiha.aung.fancytable.Recycler;
 import java.util.ArrayList;
 import java.util.List;
 
+import static thiha.aung.fancytable.dockedrowscolstable.DockedRowsColsTableAdapter.HEADER;
+
 /**
  * This view shows a table which can scroll in both directions.
  * Can define how many rows or columns needs to be fixed/docked: rows fixed on the top and columns fixed on the left
@@ -214,6 +216,7 @@ public class DockedRowsColsTable extends ViewGroup {
 
                     if (adapter.isHeader(i)){
                         final View view = makeAndSetup(i, 0, 0, top, width, bottom);
+                        view.setTag(HEADER);
                         list.add(view);
                     }else{
                         for (int j = 0; j < columnCount && left < width; j++) {
@@ -438,12 +441,11 @@ public class DockedRowsColsTable extends ViewGroup {
 
     private List<View> getRowViewList(){
         for (List<View > list : bodyViewTable){
-            // TODO find a better way to check header
-            if (list.size() > 1){
+            if (list.size() > 0 && !list.get(0).getTag().equals(HEADER)){
                 return list;
             }
         }
-        throw new RuntimeException("This should never be reached. It's a header. header has only one column");
+        return bodyViewTable.get(0);
     }
 
     /*
@@ -677,6 +679,7 @@ public class DockedRowsColsTable extends ViewGroup {
 
         if (adapter.isHeader(row)){
             view = makeView(row, 0, width, heights[row]);
+            view.setTag(HEADER);
             list.add(view);
         } else {
             int column;
@@ -714,9 +717,8 @@ public class DockedRowsColsTable extends ViewGroup {
 
     private void removeLeftOrRight(int position) {
         for (List<View> list : bodyViewTable) {
-            // size more than 1 is a header
             // shouldn't remove a header
-            if (list.size() > 1){
+            if (list.size() > 0 && !list.get(0).getTag().equals(HEADER)){
                 removeView(list.remove(position));
             }
         }
