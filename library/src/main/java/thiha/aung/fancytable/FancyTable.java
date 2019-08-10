@@ -16,7 +16,7 @@ import android.widget.Scroller;
 import java.util.ArrayList;
 import java.util.List;
 
-import static thiha.aung.fancytable.FancyTableAdapter.HEADER;
+import static thiha.aung.fancytable.FancyTableAdapter.FILL_WIDTH_VIEW;
 
 /**
  * This view shows a table which can scroll in both directions.
@@ -213,9 +213,9 @@ public class FancyTable extends ViewGroup {
                     left = 0;
                     List<View> list = new ArrayList<>();
 
-                    if (adapter.isHeader(i)){
+                    if (adapter.isOneColumnRow(i)){
                         final View view = makeAndSetup(i, 0, 0, top, width, bottom);
-                        view.setTag(HEADER);
+                        view.setTag(FILL_WIDTH_VIEW);
                         list.add(view);
                     }else{
                         for (int j = 0; j < columnCount && left < width; j++) {
@@ -440,7 +440,7 @@ public class FancyTable extends ViewGroup {
 
     private List<View> getRowViewList(){
         for (List<View > list : bodyViewTable){
-            if (list.size() > 0 && !list.get(0).getTag().equals(HEADER)){
+            if (list.size() > 0 && !list.get(0).getTag().equals(FILL_WIDTH_VIEW)){
                 return list;
             }
         }
@@ -655,7 +655,7 @@ public class FancyTable extends ViewGroup {
 
         for (row = 0; row < numDockedRows; row++) {
             list = bodyViewTable.get(row);
-            if (!adapter.isHeader(row)){
+            if (!adapter.isOneColumnRow(row)){
                 view = makeView(row, column, widths[column], heights[row]);
                 list.add(index, view);
             }
@@ -663,7 +663,7 @@ public class FancyTable extends ViewGroup {
 
         for (row = firstScrollableRow; row < bodyViewTable.size() + firstScrollableRow - numDockedRows; row++) {
             list = bodyViewTable.get(row - firstScrollableRow + numDockedRows);
-            if (!adapter.isHeader(row)){
+            if (!adapter.isOneColumnRow(row)){
                 view = makeView(row, column, widths[column], heights[row]);
                 list.add(index, view);
             }
@@ -676,9 +676,9 @@ public class FancyTable extends ViewGroup {
         List<View> list = new ArrayList<>();
         List<View> rowViewList = getRowViewList();
 
-        if (adapter.isHeader(row)){
+        if (adapter.isOneColumnRow(row)){
             view = makeView(row, 0, width, heights[row]);
-            view.setTag(HEADER);
+            view.setTag(FILL_WIDTH_VIEW);
             list.add(view);
         } else {
             int column;
@@ -717,7 +717,7 @@ public class FancyTable extends ViewGroup {
     private void removeLeftOrRight(int position) {
         for (List<View> list : bodyViewTable) {
             // shouldn't remove a header
-            if (list.size() > 0 && !list.get(0).getTag().equals(HEADER)){
+            if (list.size() > 0 && !list.get(0).getTag().equals(FILL_WIDTH_VIEW)){
                 removeView(list.remove(position));
             }
         }
@@ -745,7 +745,7 @@ public class FancyTable extends ViewGroup {
             bottom = top + heights[row];
             left = scrollStartLeft - scrollX;
             columnCells = bodyViewTable.get(row);
-            if (adapter.isHeader(row)){
+            if (adapter.isOneColumnRow(row)){
                 view = columnCells.get(0);
                 view.layout(0, top, width, bottom);
             } else {
@@ -773,7 +773,7 @@ public class FancyTable extends ViewGroup {
             bottom = top + heights[row];
             left = 0;
             columnCells = bodyViewTable.get(row - firstScrollableRow + numDockedRows);
-            if (adapter.isHeader(row)){
+            if (adapter.isOneColumnRow(row)){
                 view = columnCells.get(0);
                 view.layout(0, top, width, bottom);
             } else {
@@ -793,7 +793,7 @@ public class FancyTable extends ViewGroup {
             bottom = top + heights[row];
             left = scrollStartLeft - scrollX;
             columnCells = bodyViewTable.get(row - firstScrollableRow + numDockedRows);
-            if (adapter.isHeader(row)){
+            if (adapter.isOneColumnRow(row)){
                 view = columnCells.get(0);
                 view.layout(0, top, width, bottom);
             } else {
@@ -936,11 +936,10 @@ public class FancyTable extends ViewGroup {
         return view;
     }
 
-    // TODO FIX visibility
     private void addTableView(View view, int row, int column) {
         if (row < numDockedRows && column < numDockedColumns){
             addView(view);
-        } else if(row < numDockedRows || column < numDockedColumns && !adapter.isHeader(row)){
+        } else if(row < numDockedRows || column < numDockedColumns && !adapter.isOneColumnRow(row)){
             addView(view, getChildCount() - (numDockedRows * numDockedColumns));
         }else {
             addView(view, 0);

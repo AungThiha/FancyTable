@@ -25,10 +25,10 @@ public interface FancyTableAdapter {
     int IGNORE_ITEM_VIEW_TYPE = -1;
 
     /**
-     * Used as a tag on headers
-     * Makes it easy to check if a view is a header
+     * Used as a tag on one-column rows that fill width of the parent
+     * Makes it easy to check if a view fills the width of the parent
     * */
-    String HEADER = "header";
+    String FILL_WIDTH_VIEW = "fill_width_view";
 
     /**
      * Register an observer that is called when changes happen to the data used
@@ -102,10 +102,22 @@ public interface FancyTableAdapter {
      */
     int getHeight(int row);
 
-    boolean isHeader(int row);
+    /**
+    * Is the row one-column row and that column fill width of the parent
+     *
+    * */
+    boolean isOneColumnRow(int row);
 
+    /**
+     * should the shadow under docked rows shown
+     *
+     * */
     boolean isRowShadowShown();
 
+    /**
+     * should the shadow right to docked columns shown
+     *
+     * */
     boolean isColumnShadowShown();
 
     /**

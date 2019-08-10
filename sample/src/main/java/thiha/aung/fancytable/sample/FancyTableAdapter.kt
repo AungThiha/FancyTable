@@ -34,7 +34,7 @@ class FancyTableAdapter(
 
     override fun getNumDockedColumns() = numDockedCols
 
-    override fun isHeader(row: Int): Boolean {
+    override fun isOneColumnRow(row: Int): Boolean {
         return row % 5 == 0
     }
 
