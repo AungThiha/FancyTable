@@ -3,4 +3,5 @@
     <item name="tag_type_view" type="id" />
     <item name="tag_row" type="id" />
     <item name="tag_column" type="id" />
+    <item name="tag_column_type" type="id" />
 </resources>

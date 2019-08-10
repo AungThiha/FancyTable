@@ -215,12 +215,13 @@ public class FancyTable extends ViewGroup {
 
                     if (adapter.isOneColumnRow(i)){
                         final View view = makeAndSetup(i, 0, 0, top, width, bottom);
-                        view.setTag(FILL_WIDTH_VIEW);
+                        view.setTag(R.id.tag_column_type, FILL_WIDTH_VIEW);
                         list.add(view);
                     }else{
                         for (int j = 0; j < columnCount && left < width; j++) {
                             right = left + widths[j];
                             final View view = makeAndSetup(i, j, left, top, right, bottom);
+                            view.setTag(R.id.tag_column_type, null);
                             list.add(view);
                             left = right;
                         }
@@ -440,7 +441,7 @@ public class FancyTable extends ViewGroup {
 
     private List<View> getRowViewList(){
         for (List<View > list : bodyViewTable){
-            if (!(list.size() > 0 && FILL_WIDTH_VIEW.equals(list.get(0).getTag()))){
+            if (!(list.size() > 0 && FILL_WIDTH_VIEW.equals(list.get(0).getTag(R.id.tag_column_type)))){
                 return list;
             }
         }
@@ -657,6 +658,7 @@ public class FancyTable extends ViewGroup {
             list = bodyViewTable.get(row);
             if (!adapter.isOneColumnRow(row)){
                 view = makeView(row, column, widths[column], heights[row]);
+                view.setTag(R.id.tag_column_type, null);
                 list.add(index, view);
             }
         }
@@ -665,6 +667,7 @@ public class FancyTable extends ViewGroup {
             list = bodyViewTable.get(row - firstScrollableRow + numDockedRows);
             if (!adapter.isOneColumnRow(row)){
                 view = makeView(row, column, widths[column], heights[row]);
+                view.setTag(R.id.tag_column_type, null);
                 list.add(index, view);
             }
         }
@@ -678,18 +681,20 @@ public class FancyTable extends ViewGroup {
 
         if (adapter.isOneColumnRow(row)){
             view = makeView(row, 0, width, heights[row]);
-            view.setTag(FILL_WIDTH_VIEW);
+            view.setTag(R.id.tag_column_type, FILL_WIDTH_VIEW);
             list.add(view);
         } else {
             int column;
 
             for (column = 0; column < numDockedColumns; column++) {
                 view = makeView(row, column, widths[column], heights[row]);
+                view.setTag(R.id.tag_column_type, null);
                 list.add(view);
             }
 
             for (column = firstScrollableColumn; column < rowViewList.size() + firstScrollableColumn - numDockedColumns; column++) {
                 view = makeView(row, column, widths[column], heights[row]);
+                view.setTag(R.id.tag_column_type, null);
                 list.add(view);
             }
         }
@@ -717,7 +722,7 @@ public class FancyTable extends ViewGroup {
     private void removeLeftOrRight(int position) {
         for (List<View> list : bodyViewTable) {
             // shouldn't remove a header
-            if (!(list.size() > 0 && FILL_WIDTH_VIEW.equals(list.get(0).getTag()))){
+            if (!(list.size() > 0 && FILL_WIDTH_VIEW.equals(list.get(0).getTag(R.id.tag_column_type)))){
                 removeView(list.remove(position));
             }
         }
