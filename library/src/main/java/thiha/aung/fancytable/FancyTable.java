@@ -440,7 +440,7 @@ public class FancyTable extends ViewGroup {
 
     private List<View> getRowViewList(){
         for (List<View > list : bodyViewTable){
-            if (list.size() > 0 && !list.get(0).getTag().equals(FILL_WIDTH_VIEW)){
+            if (list.size() > 0 && !FILL_WIDTH_VIEW.equals(list.get(0).getTag())){
                 return list;
             }
         }
@@ -717,7 +717,7 @@ public class FancyTable extends ViewGroup {
     private void removeLeftOrRight(int position) {
         for (List<View> list : bodyViewTable) {
             // shouldn't remove a header
-            if (list.size() > 0 && !list.get(0).getTag().equals(FILL_WIDTH_VIEW)){
+            if (list.size() > 0 && !FILL_WIDTH_VIEW.equals(list.get(0).getTag())){
                 removeView(list.remove(position));
             }
         }
