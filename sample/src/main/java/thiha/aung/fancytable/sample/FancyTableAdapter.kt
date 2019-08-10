@@ -58,7 +58,12 @@ class FancyTableAdapter(
     private fun getViewFirstColumn(row: Int, column: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: parent.inflate(R.layout.item_first_column)
 
-        setCellViewConfigs(row, view)
+        view.findViewById<View>(R.id.divider).visibility =
+            if (row < numDockedRows) View.GONE else View.VISIBLE
+
+        view.setBackgroundResource(
+            if (isOneColumnRow(row)) R.color.colorPrimary else R.color.colorAccent
+        )
 
         val text = "$row. ${row}x$column"
         view.findViewById<TextView>(android.R.id.text1).text = text
@@ -69,22 +74,13 @@ class FancyTableAdapter(
     private fun getNormalView(row: Int, column: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: parent.inflate(R.layout.item_normal)
 
-        setCellViewConfigs(row, view)
+        view.findViewById<View>(R.id.divider).visibility =
+            if (row < numDockedRows) View.GONE else View.VISIBLE
 
         val text = "${row}x$column"
         view.findViewById<TextView>(android.R.id.text1).text = text
 
         return view
-    }
-
-    private fun setCellViewConfigs(row: Int, view: View){
-        if (row < numDockedRows) {
-            view.setBackgroundResource(R.color.colorAccent)
-            view.findViewById<View>(R.id.divider).visibility = View.GONE
-        } else {
-            view.setBackgroundResource(android.R.color.white)
-            view.findViewById<View>(R.id.divider).visibility = View.VISIBLE
-        }
     }
 
     override fun getWidth(column: Int): Int {
