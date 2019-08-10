@@ -440,7 +440,7 @@ public class FancyTable extends ViewGroup {
 
     private List<View> getRowViewList(){
         for (List<View > list : bodyViewTable){
-            if (list.size() > 0 && !FILL_WIDTH_VIEW.equals(list.get(0).getTag())){
+            if (!(list.size() > 0 && FILL_WIDTH_VIEW.equals(list.get(0).getTag()))){
                 return list;
             }
         }
@@ -717,7 +717,7 @@ public class FancyTable extends ViewGroup {
     private void removeLeftOrRight(int position) {
         for (List<View> list : bodyViewTable) {
             // shouldn't remove a header
-            if (list.size() > 0 && !FILL_WIDTH_VIEW.equals(list.get(0).getTag())){
+            if (!(list.size() > 0 && FILL_WIDTH_VIEW.equals(list.get(0).getTag()))){
                 removeView(list.remove(position));
             }
         }
@@ -940,7 +940,10 @@ public class FancyTable extends ViewGroup {
         if (row < numDockedRows && column < numDockedColumns){
             addView(view);
         } else if(row < numDockedRows || column < numDockedColumns && !adapter.isOneColumnRow(row)){
-            int index = getChildCount() - (numDockedRows * numDockedColumns);
+            int shadows = 0;
+            if (adapter.isColumnShadowShown()) shadows++;
+            if (adapter.isRowShadowShown()) shadows++;
+            int index = getChildCount() - (numDockedRows * numDockedColumns) - shadows;
             addView(view, index < 0 ? 0 : index);
         }else {
             addView(view, 0);

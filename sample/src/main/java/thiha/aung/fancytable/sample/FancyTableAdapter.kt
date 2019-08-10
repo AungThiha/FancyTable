@@ -41,7 +41,7 @@ class FancyTableAdapter(
 
     override fun isRowShadowShown() = true
 
-    override fun isColumnShadowShown() = false
+    override fun isColumnShadowShown() = !enableOneColumnRows
 
     override fun getView(row: Int, column: Int, convertView: View?, parent: ViewGroup): View {
         return when (getItemViewType(row, column)) {
