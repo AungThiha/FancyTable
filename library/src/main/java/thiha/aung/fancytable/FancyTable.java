@@ -940,7 +940,8 @@ public class FancyTable extends ViewGroup {
         if (row < numDockedRows && column < numDockedColumns){
             addView(view);
         } else if(row < numDockedRows || column < numDockedColumns && !adapter.isOneColumnRow(row)){
-            addView(view, getChildCount() - (numDockedRows * numDockedColumns));
+            int index = getChildCount() - (numDockedRows * numDockedColumns);
+            addView(view, index < 0 ? 0 : index);
         }else {
             addView(view, 0);
         }
