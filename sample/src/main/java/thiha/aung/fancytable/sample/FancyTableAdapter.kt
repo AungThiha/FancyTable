@@ -4,14 +4,14 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import thiha.aung.fancytable.dockedrowscolstable.BaseDockedRowsColsTableAdapter
+import thiha.aung.fancytable.BaseFancyTableAdapter
 import kotlin.math.roundToInt
 
-class DockedRowsColsTableAdapter(
+class FancyTableAdapter(
     private val context: Context,
     private val numDockedRows: Int,
     private val numDockedCols: Int
-) : BaseDockedRowsColsTableAdapter() {
+) : BaseFancyTableAdapter() {
 
     private val widthFirstColumn: Int
     private val width: Int

@@ -1,4 +1,4 @@
-package thiha.aung.fancytable.dockedrowscolstable;
+package thiha.aung.fancytable;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,19 +12,18 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Scroller;
-import thiha.aung.fancytable.R;
-import thiha.aung.fancytable.Recycler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static thiha.aung.fancytable.dockedrowscolstable.DockedRowsColsTableAdapter.HEADER;
+import static thiha.aung.fancytable.FancyTableAdapter.HEADER;
 
 /**
  * This view shows a table which can scroll in both directions.
  * Can define how many rows or columns needs to be fixed/docked: rows fixed on the top and columns fixed on the left
+ * Can add headers. Headers are not horizontally scrollable
  */
-public class DockedRowsColsTable extends ViewGroup {
+public class FancyTable extends ViewGroup {
 
     private final ImageView[] shadows;
     private final int shadowSize;
@@ -34,7 +33,7 @@ public class DockedRowsColsTable extends ViewGroup {
 
     private int currentX;
     private int currentY;
-    private DockedRowsColsTableAdapter adapter;
+    private FancyTableAdapter adapter;
     private int scrollX;
     private int scrollY;
     private int firstScrollableRow;
@@ -60,7 +59,7 @@ public class DockedRowsColsTable extends ViewGroup {
      * @param context The Context the view is running in, through which it can
      *                access the current theme, resources, etc.
      */
-    public DockedRowsColsTable(Context context) {
+    public FancyTable(Context context) {
         this(context, null);
     }
 
@@ -78,7 +77,7 @@ public class DockedRowsColsTable extends ViewGroup {
      *                access the current theme, resources, etc.
      * @param attrs   The attributes of the XML tag that is inflating the view.
      */
-    public DockedRowsColsTable(Context context, AttributeSet attrs) {
+    public FancyTable(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.bodyViewTable = new ArrayList<>();
 
@@ -112,7 +111,7 @@ public class DockedRowsColsTable extends ViewGroup {
      *
      * @return The adapter used to provide this view's content.
      */
-    public DockedRowsColsTableAdapter getAdapter() {
+    public FancyTableAdapter getAdapter() {
         return adapter;
     }
 
@@ -123,7 +122,7 @@ public class DockedRowsColsTable extends ViewGroup {
      *                backing this list and for producing a view to represent an
      *                item in that data set.
      */
-    public void setAdapter(DockedRowsColsTableAdapter adapter) {
+    public void setAdapter(FancyTableAdapter adapter) {
         if (this.adapter != null) {
             this.adapter.unregisterDataSetObserver(tableAdapterDataSetObserver);
         }
@@ -170,7 +169,7 @@ public class DockedRowsColsTable extends ViewGroup {
         super.removeView(view);
 
         final int typeView = (Integer) view.getTag(R.id.tag_type_view);
-        if (typeView != DockedRowsColsTableAdapter.IGNORE_ITEM_VIEW_TYPE) {
+        if (typeView != FancyTableAdapter.IGNORE_ITEM_VIEW_TYPE) {
             recycler.addRecycledView(view, typeView);
         }
     }
@@ -260,7 +259,7 @@ public class DockedRowsColsTable extends ViewGroup {
                 final int diffX = currentX - x2;
                 final int diffY = currentY - y2;
 
-                Log.d(DockedRowsColsTable.class.getSimpleName(),
+                Log.d(FancyTable.class.getSimpleName(),
                         String.format(
                                 "scrollX currentX=%d, currentY=%d, x2=%d, y2=%d, diffX=%d, diffY=%d",
                                 currentX,
@@ -313,7 +312,7 @@ public class DockedRowsColsTable extends ViewGroup {
     @Override
     public void scrollBy(int x, int y) {
 
-        Log.d(DockedRowsColsTable.class.getSimpleName(),
+        Log.d(FancyTable.class.getSimpleName(),
                 String.format(
                         "original scrollX=%d, scrollY=%d",
                         scrollX,
@@ -323,7 +322,7 @@ public class DockedRowsColsTable extends ViewGroup {
         scrollX += x;
         scrollY += y;
 
-        Log.d(DockedRowsColsTable.class.getSimpleName(),
+        Log.d(FancyTable.class.getSimpleName(),
                 String.format(
                         "before scrollX=%d, scrollY=%d",
                         scrollX,
@@ -336,7 +335,7 @@ public class DockedRowsColsTable extends ViewGroup {
 
         scrollBounds();
 
-        Log.d(DockedRowsColsTable.class.getSimpleName(),
+        Log.d(FancyTable.class.getSimpleName(),
                 String.format(
                         "before scrollX=%d, scrollY=%d",
                         scrollX,
@@ -368,7 +367,7 @@ public class DockedRowsColsTable extends ViewGroup {
             List<View> rowViewList = getRowViewList();
 
             int currentLastColumn = firstScrollableColumn - numDockedColumns + rowViewList.size() - 1;
-            Log.d(DockedRowsColsTable.class.getSimpleName(),
+            Log.d(FancyTable.class.getSimpleName(),
                     String.format(
                             "firstScrollableColumn=%d, currentLastColumn=%d, rowViewList.size()=%d",
                             firstScrollableColumn,
@@ -609,7 +608,7 @@ public class DockedRowsColsTable extends ViewGroup {
         List<View> rowViewList = getRowViewList();
         int columnSize = rowViewList.size();
         int firstRemovedRight = columnSize + firstScrollableColumn - numDockedColumns;
-        Log.d(DockedRowsColsTable.class.getSimpleName(),
+        Log.d(FancyTable.class.getSimpleName(),
                 String.format(
                         "firstScrollableColumn=%d, firstRemovedRight=%d",
                         firstScrollableColumn,
@@ -754,7 +753,7 @@ public class DockedRowsColsTable extends ViewGroup {
                     view = columnCells.get(column - firstScrollableColumn + numDockedColumns);
                     right = left + widths[column];
                     view.layout(left, top, right, bottom);
-                    Log.d(DockedRowsColsTable.class.getSimpleName(),
+                    Log.d(FancyTable.class.getSimpleName(),
                             String.format(
                                     "columnIndex=%d, left=%d, right=%d",
                                     column,
@@ -828,7 +827,7 @@ public class DockedRowsColsTable extends ViewGroup {
     }
 
     private int scrollBounds(int desiredScroll, int firstCell, int numFixedCells, int[] sizes, int viewSize) {
-        Log.d(DockedRowsColsTable.class.getSimpleName(),
+        Log.d(FancyTable.class.getSimpleName(),
                 String.format(
                         "before desiredScroll=%d",
                         desiredScroll
@@ -849,7 +848,7 @@ public class DockedRowsColsTable extends ViewGroup {
                     )
             );
         }
-        Log.d(DockedRowsColsTable.class.getSimpleName(),
+        Log.d(FancyTable.class.getSimpleName(),
                 String.format(
                         "after desiredScroll=%d",
                         desiredScroll
@@ -923,7 +922,7 @@ public class DockedRowsColsTable extends ViewGroup {
     private View makeView(int row, int column, int w, int h) {
         final int itemViewType = adapter.getItemViewType(row, column);
         final View recycledView;
-        if (itemViewType == DockedRowsColsTableAdapter.IGNORE_ITEM_VIEW_TYPE) {
+        if (itemViewType == FancyTableAdapter.IGNORE_ITEM_VIEW_TYPE) {
             recycledView = null;
         } else {
             recycledView = recycler.getRecycledView(itemViewType);

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_docked_rows_cols_table.*
 
-class DockedRowsColsTableActivity : AppCompatActivity() {
+class FancyTableActivity : AppCompatActivity() {
 
     companion object {
         const val NUM_DOCKED_ROWS = "num_docked_rows"
@@ -23,7 +23,7 @@ class DockedRowsColsTableActivity : AppCompatActivity() {
 
         val numDockedRows = intent.getIntExtra(NUM_DOCKED_ROWS, 0)
         val numDockedCols = intent.getIntExtra(NUM_DOCKED_COLS, 0)
-        tbl.adapter = DockedRowsColsTableAdapter(this, numDockedRows, numDockedCols)
+        tbl.adapter = FancyTableAdapter(this, numDockedRows, numDockedCols)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

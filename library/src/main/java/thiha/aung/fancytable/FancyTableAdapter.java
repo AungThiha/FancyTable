@@ -1,18 +1,18 @@
-package thiha.aung.fancytable.dockedrowscolstable;
+package thiha.aung.fancytable;
 
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * The DockedRowsColsTableAdapter object acts as a bridge between an DockedRowsColsTable and the
+ * The FancyTableAdapter object acts as a bridge between an DockedRowsColsTable and the
  * underlying data for that view. The Adapter provides access to the data items.
  * The Adapter is also responsible for making a View for each item in the data
  * set.
  *
- * @see DockedRowsColsTable
+ * @see FancyTable
  */
-public interface DockedRowsColsTableAdapter {
+public interface FancyTableAdapter {
 
     /**
      * An item view type that causes the AdapterView to ignore the item view.

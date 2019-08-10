@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".dockedtable.DockedRowsColsTableActivity">
 
-    <thiha.aung.fancytable.dockedrowscolstable.DockedRowsColsTable
+    <thiha.aung.fancytable.FancyTable
             android:id="@+id/tbl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

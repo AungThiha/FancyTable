@@ -1,9 +1,9 @@
-package thiha.aung.fancytable.dockedrowscolstable;
+package thiha.aung.fancytable;
 
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
 
-public abstract class BaseDockedRowsColsTableAdapter implements DockedRowsColsTableAdapter {
+public abstract class BaseFancyTableAdapter implements FancyTableAdapter {
 
     private final DataSetObservable mDataSetObservable = new DataSetObservable();
 
