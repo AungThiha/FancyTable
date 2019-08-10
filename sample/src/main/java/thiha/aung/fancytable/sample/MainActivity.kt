@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btnDockedRowsColsTable.setOnClickListener {
+        btnOpenTable.setOnClickListener {
             val intent = Intent(this, FancyTableActivity::class.java).apply {
                 putExtra(FancyTableActivity.NUM_DOCKED_ROWS, 2)
                 putExtra(FancyTableActivity.NUM_DOCKED_COLS, 2)

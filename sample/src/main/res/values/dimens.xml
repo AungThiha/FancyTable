@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="divider_size">1dp</dimen>
+
+    <dimen name="margin_standard">20dp</dimen>
+
+    <dimen name="padding_button">40dp</dimen>
+
     <dimen name="first_column_padding_vertical">4dp</dimen>
     <dimen name="first_column_padding_start">16dp</dimen>
     <dimen name="first_column_padding_end">4dp</dimen>
+
 </resources>
