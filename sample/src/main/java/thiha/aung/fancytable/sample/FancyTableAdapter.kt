@@ -10,8 +10,8 @@ import kotlin.math.roundToInt
 class FancyTableAdapter(
     private val context: Context,
     private val numDockedRows: Int,
-    private val numDockedCols: Int,
-    private val enableOneColRows: Boolean
+    private val numDockedColumns: Int,
+    private val enableOneColumnRows: Boolean
 ) : BaseFancyTableAdapter() {
 
     private val widthFirstColumn: Int
@@ -33,10 +33,10 @@ class FancyTableAdapter(
 
     override fun getNumDockedRows() = numDockedRows
 
-    override fun getNumDockedColumns() = numDockedCols
+    override fun getNumDockedColumns() = numDockedColumns
 
     override fun isOneColumnRow(row: Int): Boolean {
-        return if (enableOneColRows) row % 5 == 0 else false
+        return if (enableOneColumnRows) row % 5 == 0 else false
     }
 
     override fun isRowShadowShown() = true
@@ -48,7 +48,7 @@ class FancyTableAdapter(
             TYPE_NORMAL -> {
                 getNormalView(row, column, convertView, parent)
             }
-            TYPE_FIRST_COL -> {
+            TYPE_FIRST_COLUMN -> {
                 getViewFirstColumn(row, column, convertView, parent)
             }
             else -> throw Exception("There is no view type for table view. Row: $row, Column: $column")
@@ -103,7 +103,7 @@ class FancyTableAdapter(
 
     companion object {
         const val TYPE_NORMAL = 0
-        const val TYPE_FIRST_COL = 1
+        const val TYPE_FIRST_COLUMN = 1
     }
 
 

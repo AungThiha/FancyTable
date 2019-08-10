@@ -13,28 +13,28 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_standard"
             android:text="@string/number_of_docked_rows"
-            app:layout_constraintBottom_toTopOf="@id/labelNumberDockedCols"
+            app:layout_constraintBottom_toTopOf="@id/labelNumberDockedColumns"
             app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"/>
 
     <TextView
-            android:id="@+id/labelNumberDockedCols"
+            android:id="@+id/labelNumberDockedColumns"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_standard"
             android:text="@string/number_of_docked_cols"
             app:layout_constraintTop_toBottomOf="@id/labelNumberDockedRows"
-            app:layout_constraintBottom_toTopOf="@id/labelOneColRows"
+            app:layout_constraintBottom_toTopOf="@id/labelOneColumnRows"
             app:layout_constraintEnd_toStartOf="@id/guideline"/>
 
     <TextView
-            android:id="@+id/labelOneColRows"
+            android:id="@+id/labelOneColumnRows"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_standard"
             android:text="@string/one_col_rows"
-            app:layout_constraintTop_toBottomOf="@id/labelNumberDockedCols"
+            app:layout_constraintTop_toBottomOf="@id/labelNumberDockedColumns"
             app:layout_constraintBottom_toTopOf="@id/btnOpenTable"
             app:layout_constraintEnd_toStartOf="@id/guideline"/>
 
@@ -46,7 +46,7 @@
             android:paddingStart="@dimen/padding_button"
             android:paddingEnd="@dimen/padding_button"
             android:text="@string/open_table"
-            app:layout_constraintTop_toBottomOf="@id/labelOneColRows"
+            app:layout_constraintTop_toBottomOf="@id/labelOneColumnRows"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -62,23 +62,23 @@
             app:layout_constraintBottom_toBottomOf="@id/labelNumberDockedRows"/>
 
     <com.travijuu.numberpicker.library.NumberPicker
-            android:id="@+id/numberDockedCols"
+            android:id="@+id/numberDockedColumns"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:value="1"
             app:max="19"
             app:layout_constraintStart_toEndOf="@id/guideline"
-            app:layout_constraintTop_toTopOf="@id/labelNumberDockedCols"
-            app:layout_constraintBottom_toBottomOf="@id/labelNumberDockedCols"/>
+            app:layout_constraintTop_toTopOf="@id/labelNumberDockedColumns"
+            app:layout_constraintBottom_toBottomOf="@id/labelNumberDockedColumns"/>
 
     <Switch
-            android:id="@+id/oneColRows"
+            android:id="@+id/oneColumnRows"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/numberDockedCols"
-            app:layout_constraintEnd_toEndOf="@id/numberDockedCols"
-            app:layout_constraintTop_toTopOf="@id/labelOneColRows"
-            app:layout_constraintBottom_toBottomOf="@id/labelOneColRows"/>
+            app:layout_constraintStart_toStartOf="@id/numberDockedColumns"
+            app:layout_constraintEnd_toEndOf="@id/numberDockedColumns"
+            app:layout_constraintTop_toTopOf="@id/labelOneColumnRows"
+            app:layout_constraintBottom_toBottomOf="@id/labelOneColumnRows"/>
 
     <androidx.constraintlayout.widget.Guideline
             android:layout_width="wrap_content"

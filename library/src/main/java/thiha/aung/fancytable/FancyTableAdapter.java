@@ -28,7 +28,7 @@ public interface FancyTableAdapter {
      * Used as a tag on one-column rows that fill width of the parent
      * Makes it easy to check if a view fills the width of the parent
     * */
-    String FILL_WIDTH_VIEW = "fill_width_view";
+    String FILL_WIDTH_VIEW = "FILL_WIDTH_VIEW";
 
     /**
      * Register an observer that is called when changes happen to the data used

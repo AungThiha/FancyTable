@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(FancyTableActivity.createIntent(
                 this,
                 numberDockedRows.value,
-                numberDockedCols.value,
-                oneColRows.isChecked
+                numberDockedColumns.value,
+                oneColumnRows.isChecked
             ))
         }
     }
