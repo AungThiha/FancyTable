@@ -10,7 +10,8 @@ import kotlin.math.roundToInt
 class FancyTableAdapter(
     private val context: Context,
     private val numDockedRows: Int,
-    private val numDockedCols: Int
+    private val numDockedCols: Int,
+    private val enableOneColRows: Boolean
 ) : BaseFancyTableAdapter() {
 
     private val widthFirstColumn: Int
@@ -35,7 +36,7 @@ class FancyTableAdapter(
     override fun getNumDockedColumns() = numDockedCols
 
     override fun isOneColumnRow(row: Int): Boolean {
-        return row % 5 == 0
+        return if (enableOneColRows) row % 5 == 0 else false
     }
 
     override fun isRowShadowShown() = true

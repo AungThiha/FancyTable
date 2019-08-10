@@ -10,6 +10,7 @@ class FancyTableActivity : AppCompatActivity() {
     companion object {
         const val NUM_DOCKED_ROWS = "num_docked_rows"
         const val NUM_DOCKED_COLS = "num_docked_cols"
+        const val ENABLE_ONE_COL_ROWS = "enable_one_col_rows"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,9 +22,14 @@ class FancyTableActivity : AppCompatActivity() {
             it.setDisplayShowHomeEnabled(true)
         }
 
-        val numDockedRows = intent.getIntExtra(NUM_DOCKED_ROWS, 0)
-        val numDockedCols = intent.getIntExtra(NUM_DOCKED_COLS, 0)
-        tbl.adapter = FancyTableAdapter(this, numDockedRows, numDockedCols)
+        with(intent) {
+            tbl.adapter = FancyTableAdapter(this@FancyTableActivity,
+                getIntExtra(NUM_DOCKED_ROWS, 0),
+                getIntExtra(NUM_DOCKED_COLS, 0),
+                getBooleanExtra(ENABLE_ONE_COL_ROWS, false)
+            )
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

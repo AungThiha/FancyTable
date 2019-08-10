@@ -13,8 +13,9 @@ class MainActivity : AppCompatActivity() {
 
         btnOpenTable.setOnClickListener {
             val intent = Intent(this, FancyTableActivity::class.java).apply {
-                putExtra(FancyTableActivity.NUM_DOCKED_ROWS, 2)
-                putExtra(FancyTableActivity.NUM_DOCKED_COLS, 2)
+                putExtra(FancyTableActivity.NUM_DOCKED_ROWS, numberDockedRows.value)
+                putExtra(FancyTableActivity.NUM_DOCKED_COLS, numberDockedCols.value)
+                putExtra(FancyTableActivity.ENABLE_ONE_COL_ROWS, oneColRows.isEnabled)
             }
             startActivity(intent)
         }

@@ -2,7 +2,7 @@
     <string name="app_name">Sample</string>
 
     <string name="open_table">Open Table</string>
-    <string name="one_column_rows">One-column rows :</string>
-    <string name="number_of_docked_columns">Number of docked columns :</string>
+    <string name="one_col_rows">One-column rows :</string>
+    <string name="number_of_docked_cols">Number of docked columns :</string>
     <string name="number_of_docked_rows">Number of docked rows :</string>
 </resources>
