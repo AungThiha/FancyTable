@@ -8,8 +8,6 @@ An android library
 3. Ability to add rows that fill the width of the parent so that they look like headers and make the table look like it has multiple sub-tables within
 4. Ability to disable and enable all of the above
 
-The library is written based on [TableFixHeaders](https://github.com/InQBarna/TableFixHeaders)
-
 <img src="https://media.giphy.com/media/f6E5vnYcMz0KZBdJLz/giphy.gif" width="320" alt="Demo Gif"/>
 
 # Usage
@@ -99,3 +97,5 @@ class SampleAdapter : BaseFancyTableAdapter() {
 ```Kotlin
 fancyTable.adapter = SampleAdapter()
 ```
+
+The library is written based on [TableFixHeaders](https://github.com/InQBarna/TableFixHeaders)
