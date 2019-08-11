@@ -34,4 +34,28 @@ public abstract class BaseFancyTableAdapter implements FancyTableAdapter {
         mDataSetObservable.notifyInvalidated();
     }
 
+    @Override
+    public int getNumDockedRows() {
+        return 1;
+    }
+
+    @Override
+    public int getNumDockedColumns() {
+        return 1;
+    }
+
+    @Override
+    public boolean isOneColumnRow(int row) {
+        return false;
+    }
+
+    @Override
+    public boolean isRowShadowShown() {
+        return true;
+    }
+
+    @Override
+    public boolean isColumnShadowShown() {
+        return true;
+    }
 }
