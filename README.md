@@ -20,7 +20,7 @@ allprojects {
 ### Add the dependency
 ```groovy
 dependencies {
-  implementation 'thiha.aung.fancytable:fancytable:1.0.0'
+  implementation 'thiha.aung.fancytable:fancytable:1.0.1'
 }
 ```
 ### Declare FancyTable in a layout file
