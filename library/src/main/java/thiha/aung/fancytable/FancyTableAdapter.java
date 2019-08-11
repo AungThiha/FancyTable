@@ -84,6 +84,7 @@ public interface FancyTableAdapter {
      *
      * @param row The row of the item within the adapter's data table of the
      * @param column The column of the item within the adapter's data table of the
+     * @param convertView view to be recycled
      * @param parent The parent that this view will eventually be attached to.
      * @return A View corresponding to the data at the specified row and column.
      */
@@ -108,18 +109,23 @@ public interface FancyTableAdapter {
     /**
     * Is the row one-column row and that column fill width of the parent
      *
+     * @param row index
+     *
+     * @return if the row should has one column and that column should fill the width of the parent
     * */
     boolean isOneColumnRow(int row);
 
     /**
      * should the shadow under docked rows shown
      *
+     * @return should there be a shadow under horizontal docked area
      * */
     boolean isRowShadowShown();
 
     /**
      * should the shadow right to docked columns shown
      *
+     * @return should there be a shadow right to vertical docked area
      * */
     boolean isColumnShadowShown();
 
@@ -143,7 +149,7 @@ public interface FancyTableAdapter {
      * of views that can be converted in
      * {@link #getView(int, int, View, ViewGroup)}. If the adapter always
      * returns the same type of View for all items, this method should return 1.
-     * <p/>
+     *
      * This method will only be called when when the adapter is set on the the
      * AdapterView.
      *
