@@ -97,5 +97,5 @@ class SampleAdapter : BaseFancyTableAdapter() {
 ```Kotlin
 fancyTable.adapter = SampleAdapter()
 ```
-
+---
 The library is written based on [TableFixHeaders](https://github.com/InQBarna/TableFixHeaders)
