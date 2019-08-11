@@ -22,7 +22,6 @@ class FancyTableAdapter(
         width = dpToPx(60)
         height = width
         widthFirstColumn = dpToPx(120)
-
     }
 
     private fun dpToPx(dps: Int) = (context.resources.displayMetrics.density * dps).roundToInt()
