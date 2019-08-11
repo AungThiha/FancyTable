@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_docked_rows_columns_table.*
+import kotlinx.android.synthetic.main.activity_fancy_table.*
 
 class FancyTableActivity : AppCompatActivity() {
 
@@ -30,7 +30,7 @@ class FancyTableActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_docked_rows_columns_table)
+        setContentView(R.layout.activity_fancy_table)
 
         supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
