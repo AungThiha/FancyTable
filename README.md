@@ -40,11 +40,11 @@ class SampleAdapter : BaseFancyTableAdapter() {
 
     override fun getColumnCount() = 20
     
-    override fun getNumDockedRows() = 2
+    override fun getDockedRowCount() = 2
 
-    override fun getNumDockedColumns() = 2
+    override fun getDockedColumnCount() = 2
 
-    override fun isOneColumnRow(row: Int): Boolean {
+    override fun isRowOneColumn(row: Int): Boolean {
         return if (row == 5) true else false
     }
 
