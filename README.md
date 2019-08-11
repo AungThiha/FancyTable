@@ -7,7 +7,7 @@ The library is written based on [TableFixHeaders](https://github.com/InQBarna/Ta
 
 # Usage
 
-### Add the JitPack repository to your build file
+### Add the jcenter repository to your build file
 Note that this is added inside `allprojects`, not inside `buildscript`
 ```groovy
 allprojects {
