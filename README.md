@@ -32,6 +32,7 @@ dependencies {
 
 ### Extend BaseFancyTableAdapter for the adapter
 You can create as many view types as you want. For the purpose of demonstration, there are only 2 view types in this example.
+Using ViewHolder(s) is also recommended.
 ```Kotlin
 class SampleAdapter : BaseFancyTableAdapter() {
 
