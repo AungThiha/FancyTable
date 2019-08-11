@@ -1,5 +1,12 @@
 # FancyTable
-Android library to implement two-direction scrollable table with `adjustable number of docked/fixed columns and rows` and/or with one-column rows that fill the width of parent which makes it look like `multiple sub-tables with headers` inside the main table.
+
+An android library
+
+### Features
+1. Both both vertically and horizontally scrollable
+2. Adjustable numbers of docked/fixed rows and columns
+3. Ability to add rows that fill the width of the parent so that they look like headers and make the table look like it has multiple sub-tables within
+4. Ability to disable and enable all of the above
 
 The library is written based on [TableFixHeaders](https://github.com/InQBarna/TableFixHeaders)
 
