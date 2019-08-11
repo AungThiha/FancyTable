@@ -65,14 +65,14 @@ public interface FancyTableAdapter {
      *
      * @return number of rows.
      */
-    int getNumDockedRows();
+    int getDockedRowCount();
 
     /**
      * How many columns are rows fixed on the top meaning the number of columns that are not part of scrollable.
      *
      * @return number of columns.
      */
-    int getNumDockedColumns();
+    int getDockedColumnCount();
 
     /**
      * Get a View that displays the data at the specified row and column in the
@@ -113,7 +113,7 @@ public interface FancyTableAdapter {
      *
      * @return if the row should has one column and that column should fill the width of the parent
     * */
-    boolean isOneColumnRow(int row);
+    boolean isRowOneColumn(int row);
 
     /**
      * should the shadow under docked rows shown

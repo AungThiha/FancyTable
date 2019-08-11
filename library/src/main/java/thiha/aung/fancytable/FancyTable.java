@@ -38,8 +38,8 @@ public class FancyTable extends ViewGroup {
     private int scrollY;
     private int firstScrollableRow;
     private int firstScrollableColumn;
-    private int numDockedRows;
-    private int numDockedColumns;
+    private int dockedRowCount;
+    private int dockedColumnCount;
     private int[] widths;
     private int[] heights;
     private List<List<View>> bodyViewTable;
@@ -136,8 +136,8 @@ public class FancyTable extends ViewGroup {
         scrollX = 0;
         scrollY = 0;
 
-        firstScrollableRow = adapter.getNumDockedRows();
-        firstScrollableColumn = adapter.getNumDockedColumns();
+        firstScrollableRow = adapter.getDockedRowCount();
+        firstScrollableColumn = adapter.getDockedColumnCount();
 
         needRelayout = true;
         requestLayout();
@@ -191,12 +191,12 @@ public class FancyTable extends ViewGroup {
                 bottom = Math.min(height, sumArray(heights));
 
                 if (adapter.isColumnShadowShown()){
-                    int columnShadowLeft = sumArray(widths, 0, numDockedColumns);
+                    int columnShadowLeft = sumArray(widths, 0, dockedColumnCount);
                     addShadow(shadows[0], columnShadowLeft, 0, columnShadowLeft + shadowSize, bottom);
                 }
 
                 if (adapter.isRowShadowShown()){
-                    int rowShadowTop = sumArray(heights, 0, numDockedRows);
+                    int rowShadowTop = sumArray(heights, 0, dockedRowCount);
                     addShadow(shadows[1], 0, rowShadowTop, right, rowShadowTop + shadowSize);
                 }
                 //                addShadow(shadows[2], right - shadowSize, 0, right, bottom);
@@ -213,7 +213,7 @@ public class FancyTable extends ViewGroup {
                     left = 0;
                     List<View> list = new ArrayList<>();
 
-                    if (adapter.isOneColumnRow(i)){
+                    if (adapter.isRowOneColumn(i)){
                         final View view = makeAndSetup(i, 0, 0, top, width, bottom);
                         view.setTag(R.id.tag_column_type, FILL_WIDTH_VIEW);
                         list.add(view);
@@ -301,12 +301,12 @@ public class FancyTable extends ViewGroup {
     public void scrollTo(int x, int y) {
         if (needRelayout) {
             scrollX = x;
-            firstScrollableColumn = adapter == null ? 0 : adapter.getNumDockedColumns();
+            firstScrollableColumn = adapter == null ? 0 : adapter.getDockedColumnCount();
 
             scrollY = y;
-            firstScrollableRow = adapter == null ? 0 : adapter.getNumDockedRows();
+            firstScrollableRow = adapter == null ? 0 : adapter.getDockedRowCount();
         } else {
-            scrollBy(x - sumArray(widths, numDockedColumns, firstScrollableColumn) - scrollX, y - sumArray(heights, numDockedRows, firstScrollableRow) - scrollY);
+            scrollBy(x - sumArray(widths, dockedColumnCount, firstScrollableColumn) - scrollX, y - sumArray(heights, dockedRowCount, firstScrollableRow) - scrollY);
         }
     }
 
@@ -350,7 +350,7 @@ public class FancyTable extends ViewGroup {
          * will have eliminated to generate the right at the Y.
          */
         List<View> rowViewList = getRowViewList();
-        if (scrollX == 0 || rowViewList.size() < numDockedColumns) {
+        if (scrollX == 0 || rowViewList.size() < dockedColumnCount) {
             // no op
         } else if (scrollX > 0) {
             while (widths[firstScrollableColumn] < scrollX) {
@@ -365,7 +365,7 @@ public class FancyTable extends ViewGroup {
             }
         } else {
 
-            int currentLastColumn = firstScrollableColumn - numDockedColumns + rowViewList.size() - 1;
+            int currentLastColumn = firstScrollableColumn - dockedColumnCount + rowViewList.size() - 1;
             Log.d(FancyTable.class.getSimpleName(),
                     String.format(
                             "firstScrollableColumn=%d, currentLastColumn=%d, rowViewList.size()=%d",
@@ -394,7 +394,7 @@ public class FancyTable extends ViewGroup {
             }
         }
 
-        if (scrollY == 0 || bodyViewTable.size() < numDockedRows) {
+        if (scrollY == 0 || bodyViewTable.size() < dockedRowCount) {
             // no op
         } else if (scrollY > 0) {
             while (heights[firstScrollableRow] < scrollY) {
@@ -408,7 +408,7 @@ public class FancyTable extends ViewGroup {
                 addBottom();
             }
         } else {
-            int currentLastRow = firstScrollableRow - numDockedRows + bodyViewTable.size() - 1;
+            int currentLastRow = firstScrollableRow - dockedRowCount + bodyViewTable.size() - 1;
             while (!bodyViewTable.isEmpty()
                     && getFilledHeight() - heights[currentLastRow] >= height) {
                 removeBottom();
@@ -461,7 +461,7 @@ public class FancyTable extends ViewGroup {
     protected int computeHorizontalScrollOffset() {
         final float maxScrollX = sumArray(widths) - width;
         final float percentageOfViewScrolled = getActualScrollX() / maxScrollX;
-        int scrollStartLeft = sumArray(widths, 0, numDockedColumns);
+        int scrollStartLeft = sumArray(widths, 0, dockedColumnCount);
         final int maxHorizontalScrollOffset = width - scrollStartLeft - computeHorizontalScrollExtent();
 
         return scrollStartLeft + Math.round(percentageOfViewScrolled * maxHorizontalScrollOffset);
@@ -472,9 +472,9 @@ public class FancyTable extends ViewGroup {
      */
     @Override
     protected int computeHorizontalScrollExtent() {
-        int scrollStartLeft = sumArray(widths, 0, numDockedColumns);
+        int scrollStartLeft = sumArray(widths, 0, dockedColumnCount);
         final float tableSize = width - scrollStartLeft;
-        final float contentSize = sumArray(widths, numDockedColumns, widths.length);
+        final float contentSize = sumArray(widths, dockedColumnCount, widths.length);
         final float percentageOfVisibleView = tableSize / contentSize;
 
         return Math.round(percentageOfVisibleView * tableSize);
@@ -495,7 +495,7 @@ public class FancyTable extends ViewGroup {
     protected int computeVerticalScrollOffset() {
         final float maxScrollY = sumArray(heights) - height;
         final float percentageOfViewScrolled = getActualScrollY() / maxScrollY;
-        int scrollStartTop = sumArray(heights, 0, numDockedRows);
+        int scrollStartTop = sumArray(heights, 0, dockedRowCount);
         final int maxHorizontalScrollOffset = height - scrollStartTop - computeVerticalScrollExtent();
 
         return scrollStartTop + Math.round(percentageOfViewScrolled * maxHorizontalScrollOffset);
@@ -506,9 +506,9 @@ public class FancyTable extends ViewGroup {
      */
     @Override
     protected int computeVerticalScrollExtent() {
-        int scrollStartTop = sumArray(heights, 0, numDockedRows);
+        int scrollStartTop = sumArray(heights, 0, dockedRowCount);
         final float tableSize = height - scrollStartTop;
-        final float contentSize = sumArray(heights, numDockedRows, heights.length);
+        final float contentSize = sumArray(heights, dockedRowCount, heights.length);
         final float percentageOfVisibleView = tableSize / contentSize;
 
         return Math.round(percentageOfVisibleView * tableSize);
@@ -528,8 +528,8 @@ public class FancyTable extends ViewGroup {
 
             this.rowCount = adapter.getRowCount();
             this.columnCount = adapter.getColumnCount();
-            this.numDockedRows = adapter.getNumDockedRows();
-            this.numDockedColumns = adapter.getNumDockedColumns();
+            this.dockedRowCount = adapter.getDockedRowCount();
+            this.dockedColumnCount = adapter.getDockedColumnCount();
 
             widths = new int[columnCount];
             heights = new int[rowCount];
@@ -576,11 +576,11 @@ public class FancyTable extends ViewGroup {
         }
 
         if (firstScrollableRow >= rowCount || getMaxScrollY() - getActualScrollY() < 0) {
-            firstScrollableRow = adapter == null ? 0 : adapter.getNumDockedRows();
+            firstScrollableRow = adapter == null ? 0 : adapter.getDockedRowCount();
             scrollY = Integer.MAX_VALUE;
         }
         if (firstScrollableColumn >= columnCount || getMaxScrollX() - getActualScrollX() < 0) {
-            firstScrollableColumn = adapter == null ? 0 : adapter.getNumDockedColumns();
+            firstScrollableColumn = adapter == null ? 0 : adapter.getDockedColumnCount();
             scrollX = Integer.MAX_VALUE;
         }
 
@@ -588,11 +588,11 @@ public class FancyTable extends ViewGroup {
     }
 
     public int getActualScrollX() {
-        return scrollX + sumArray(widths, numDockedColumns, firstScrollableColumn);
+        return scrollX + sumArray(widths, dockedColumnCount, firstScrollableColumn);
     }
 
     public int getActualScrollY() {
-        return scrollY + sumArray(heights, numDockedRows, firstScrollableRow);
+        return scrollY + sumArray(heights, dockedRowCount, firstScrollableRow);
     }
 
     private int getMaxScrollX() {
@@ -606,7 +606,7 @@ public class FancyTable extends ViewGroup {
     private int getFilledWidth() {
         List<View> rowViewList = getRowViewList();
         int columnSize = rowViewList.size();
-        int firstRemovedRight = columnSize + firstScrollableColumn - numDockedColumns;
+        int firstRemovedRight = columnSize + firstScrollableColumn - dockedColumnCount;
         Log.d(FancyTable.class.getSimpleName(),
                 String.format(
                         "firstScrollableColumn=%d, firstRemovedRight=%d",
@@ -614,35 +614,35 @@ public class FancyTable extends ViewGroup {
                         firstRemovedRight
                 )
         );
-        return sumArray(widths, 0, numDockedColumns) + sumArray(widths, firstScrollableColumn, firstRemovedRight) - scrollX;
+        return sumArray(widths, 0, dockedColumnCount) + sumArray(widths, firstScrollableColumn, firstRemovedRight) - scrollX;
     }
 
     private int getFilledHeight() {
         int rowSize = bodyViewTable.size();
-        return sumArray(heights, 0, numDockedRows) + sumArray(heights, firstScrollableRow, rowSize + firstScrollableRow - numDockedRows) - scrollY;
+        return sumArray(heights, 0, dockedRowCount) + sumArray(heights, firstScrollableRow, rowSize + firstScrollableRow - dockedRowCount) - scrollY;
     }
 
     private void addLeft() {
         final int column = firstScrollableColumn - 1;
-        final int index = numDockedColumns;
+        final int index = dockedColumnCount;
         addLeftOrRight(column, index);
     }
 
     private void addTop() {
         final int row = firstScrollableRow - 1;
-        final int index = numDockedRows;
+        final int index = dockedRowCount;
         addTopAndBottom(row, index);
     }
 
     private void addRight() {
         final int index = getRowViewList().size();
-        final int column = firstScrollableColumn - numDockedColumns + index;
+        final int column = firstScrollableColumn - dockedColumnCount + index;
         addLeftOrRight(column, index);
     }
 
     private void addBottom() {
         final int index = bodyViewTable.size();
-        final int row = firstScrollableRow - numDockedRows + index;
+        final int row = firstScrollableRow - dockedRowCount + index;
         addTopAndBottom(row, index);
     }
 
@@ -652,18 +652,18 @@ public class FancyTable extends ViewGroup {
         List<View> list;
         int row;
 
-        for (row = 0; row < numDockedRows; row++) {
+        for (row = 0; row < dockedRowCount; row++) {
             list = bodyViewTable.get(row);
-            if (!adapter.isOneColumnRow(row)){
+            if (!adapter.isRowOneColumn(row)){
                 view = makeView(row, column, widths[column], heights[row]);
                 view.setTag(R.id.tag_column_type, null);
                 list.add(index, view);
             }
         }
 
-        for (row = firstScrollableRow; row < bodyViewTable.size() + firstScrollableRow - numDockedRows; row++) {
-            list = bodyViewTable.get(row - firstScrollableRow + numDockedRows);
-            if (!adapter.isOneColumnRow(row)){
+        for (row = firstScrollableRow; row < bodyViewTable.size() + firstScrollableRow - dockedRowCount; row++) {
+            list = bodyViewTable.get(row - firstScrollableRow + dockedRowCount);
+            if (!adapter.isRowOneColumn(row)){
                 view = makeView(row, column, widths[column], heights[row]);
                 view.setTag(R.id.tag_column_type, null);
                 list.add(index, view);
@@ -677,20 +677,20 @@ public class FancyTable extends ViewGroup {
         List<View> list = new ArrayList<>();
         List<View> rowViewList = getRowViewList();
 
-        if (adapter.isOneColumnRow(row)){
+        if (adapter.isRowOneColumn(row)){
             view = makeView(row, 0, width, heights[row]);
             view.setTag(R.id.tag_column_type, FILL_WIDTH_VIEW);
             list.add(view);
         } else {
             int column;
 
-            for (column = 0; column < numDockedColumns; column++) {
+            for (column = 0; column < dockedColumnCount; column++) {
                 view = makeView(row, column, widths[column], heights[row]);
                 view.setTag(R.id.tag_column_type, null);
                 list.add(view);
             }
 
-            for (column = firstScrollableColumn; column < rowViewList.size() + firstScrollableColumn - numDockedColumns; column++) {
+            for (column = firstScrollableColumn; column < rowViewList.size() + firstScrollableColumn - dockedColumnCount; column++) {
                 view = makeView(row, column, widths[column], heights[row]);
                 view.setTag(R.id.tag_column_type, null);
                 list.add(view);
@@ -701,11 +701,11 @@ public class FancyTable extends ViewGroup {
     }
 
     private void removeLeft() {
-        removeLeftOrRight(numDockedColumns);
+        removeLeftOrRight(dockedColumnCount);
     }
 
     private void removeTop() {
-        removeTopOrBottom(numDockedRows);
+        removeTopOrBottom(dockedRowCount);
     }
 
     private void removeRight() {
@@ -736,24 +736,24 @@ public class FancyTable extends ViewGroup {
     private void repositionViews() {
         int left, top, right, bottom, row, column;
 
-        int scrollStartLeft = sumArray(widths, 0, numDockedColumns);
-        int scrollStartTop = sumArray(heights, 0, numDockedRows);
+        int scrollStartLeft = sumArray(widths, 0, dockedColumnCount);
+        int scrollStartTop = sumArray(heights, 0, dockedRowCount);
         List<View> columnCells;
         View view;
 
 
         // reposition fixed rows
         top = 0;
-        for (row = 0; row < numDockedRows && row < bodyViewTable.size(); row++) {
+        for (row = 0; row < dockedRowCount && row < bodyViewTable.size(); row++) {
             bottom = top + heights[row];
             left = scrollStartLeft - scrollX;
             columnCells = bodyViewTable.get(row);
-            if (adapter.isOneColumnRow(row)){
+            if (adapter.isRowOneColumn(row)){
                 view = columnCells.get(0);
                 view.layout(0, top, width, bottom);
             } else {
-                for (column = firstScrollableColumn; column < columnCells.size() + firstScrollableColumn - numDockedColumns; column++) {
-                    view = columnCells.get(column - firstScrollableColumn + numDockedColumns);
+                for (column = firstScrollableColumn; column < columnCells.size() + firstScrollableColumn - dockedColumnCount; column++) {
+                    view = columnCells.get(column - firstScrollableColumn + dockedColumnCount);
                     right = left + widths[column];
                     view.layout(left, top, right, bottom);
                     Log.d(FancyTable.class.getSimpleName(),
@@ -772,15 +772,15 @@ public class FancyTable extends ViewGroup {
 
         // reposition fixed columns
         top = scrollStartTop - scrollY;
-        for (row = firstScrollableRow; row < bodyViewTable.size() + firstScrollableRow - numDockedRows; row++) {
+        for (row = firstScrollableRow; row < bodyViewTable.size() + firstScrollableRow - dockedRowCount; row++) {
             bottom = top + heights[row];
             left = 0;
-            columnCells = bodyViewTable.get(row - firstScrollableRow + numDockedRows);
-            if (adapter.isOneColumnRow(row)){
+            columnCells = bodyViewTable.get(row - firstScrollableRow + dockedRowCount);
+            if (adapter.isRowOneColumn(row)){
                 view = columnCells.get(0);
                 view.layout(0, top, width, bottom);
             } else {
-                for (column = 0; column < numDockedColumns && column < columnCells.size(); column++) {
+                for (column = 0; column < dockedColumnCount && column < columnCells.size(); column++) {
                     view = columnCells.get(column);
                     right = left + widths[column];
                     view.layout(left, top, right, bottom);
@@ -792,16 +792,16 @@ public class FancyTable extends ViewGroup {
 
         // reposition two way scrollable cells
         top = scrollStartTop - scrollY;
-        for (row = firstScrollableRow; row < bodyViewTable.size() + firstScrollableRow - numDockedRows; row++) {
+        for (row = firstScrollableRow; row < bodyViewTable.size() + firstScrollableRow - dockedRowCount; row++) {
             bottom = top + heights[row];
             left = scrollStartLeft - scrollX;
-            columnCells = bodyViewTable.get(row - firstScrollableRow + numDockedRows);
-            if (adapter.isOneColumnRow(row)){
+            columnCells = bodyViewTable.get(row - firstScrollableRow + dockedRowCount);
+            if (adapter.isRowOneColumn(row)){
                 view = columnCells.get(0);
                 view.layout(0, top, width, bottom);
             } else {
-                for (column = firstScrollableColumn; column < columnCells.size() + firstScrollableColumn - numDockedColumns; column++) {
-                    view = columnCells.get(column - firstScrollableColumn + numDockedColumns);
+                for (column = firstScrollableColumn; column < columnCells.size() + firstScrollableColumn - dockedColumnCount; column++) {
+                    view = columnCells.get(column - firstScrollableColumn + dockedColumnCount);
                     right = left + widths[column];
                     view.layout(left, top, right, bottom);
                     left = right;
@@ -825,8 +825,8 @@ public class FancyTable extends ViewGroup {
     }
 
     private void scrollBounds() {
-        scrollX = scrollBounds(scrollX, firstScrollableColumn, numDockedColumns, widths, width);
-        scrollY = scrollBounds(scrollY, firstScrollableRow, numDockedRows, heights, height);
+        scrollX = scrollBounds(scrollX, firstScrollableColumn, dockedColumnCount, widths, width);
+        scrollY = scrollBounds(scrollY, firstScrollableRow, dockedRowCount, heights, height);
     }
 
     private int scrollBounds(int desiredScroll, int firstCell, int numFixedCells, int[] sizes, int viewSize) {
@@ -940,13 +940,13 @@ public class FancyTable extends ViewGroup {
     }
 
     private void addTableView(View view, int row, int column) {
-        if (row < numDockedRows && column < numDockedColumns){
+        if (row < dockedRowCount && column < dockedColumnCount){
             addView(view);
-        } else if(row < numDockedRows || column < numDockedColumns && !adapter.isOneColumnRow(row)){
+        } else if(row < dockedRowCount || column < dockedColumnCount && !adapter.isRowOneColumn(row)){
             int shadows = 0;
             if (adapter.isColumnShadowShown()) shadows++;
             if (adapter.isRowShadowShown()) shadows++;
-            int index = getChildCount() - (numDockedRows * numDockedColumns) - shadows;
+            int index = getChildCount() - (dockedRowCount * dockedColumnCount) - shadows;
             addView(view, index < 0 ? 0 : index);
         }else {
             addView(view, 0);

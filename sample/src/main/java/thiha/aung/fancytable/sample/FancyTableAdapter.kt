@@ -9,8 +9,8 @@ import kotlin.math.roundToInt
 
 class FancyTableAdapter(
     private val context: Context,
-    private val numDockedRows: Int,
-    private val numDockedColumns: Int,
+    private val dockedRowCount: Int,
+    private val dockedColumnCount: Int,
     private val enableOneColumnRows: Boolean
 ) : BaseFancyTableAdapter() {
 
@@ -30,14 +30,14 @@ class FancyTableAdapter(
 
     override fun getColumnCount() = 20
 
-    override fun getNumDockedRows() = numDockedRows
+    override fun getDockedRowCount() = dockedRowCount
 
-    override fun getNumDockedColumns() = numDockedColumns
+    override fun getDockedColumnCount() = dockedColumnCount
 
     /*
     add one-column rows at row indexes that are dividable by 5
     * */
-    override fun isOneColumnRow(row: Int): Boolean {
+    override fun isRowOneColumn(row: Int): Boolean {
         return if (enableOneColumnRows) row % 5 == 0 else false
     }
 
@@ -70,10 +70,10 @@ class FancyTableAdapter(
         val view = convertView ?: parent.inflate(R.layout.item_first_column)
 
         view.findViewById<View>(R.id.divider).visibility =
-            if (row < numDockedRows) View.GONE else View.VISIBLE
+            if (row < dockedRowCount) View.GONE else View.VISIBLE
 
         view.setBackgroundResource(
-            if (isOneColumnRow(row)) R.color.colorPrimary else R.color.colorAccent
+            if (isRowOneColumn(row)) R.color.colorPrimary else R.color.colorAccent
         )
 
         val text = "$row. ${row}x$column"
@@ -86,10 +86,10 @@ class FancyTableAdapter(
         val view = convertView ?: parent.inflate(R.layout.item_normal)
 
         view.findViewById<View>(R.id.divider).visibility =
-            if (row < numDockedRows) View.GONE else View.VISIBLE
+            if (row < dockedRowCount) View.GONE else View.VISIBLE
 
         view.setBackgroundResource(
-            if (column < numDockedColumns) R.color.colorAccent else android.R.color.white
+            if (column < dockedColumnCount) R.color.colorAccent else android.R.color.white
         )
 
         val text = "${row}x$column"

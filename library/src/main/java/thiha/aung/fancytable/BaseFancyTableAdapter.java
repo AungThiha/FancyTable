@@ -35,17 +35,17 @@ public abstract class BaseFancyTableAdapter implements FancyTableAdapter {
     }
 
     @Override
-    public int getNumDockedRows() {
+    public int getDockedRowCount() {
         return 1;
     }
 
     @Override
-    public int getNumDockedColumns() {
+    public int getDockedColumnCount() {
         return 1;
     }
 
     @Override
-    public boolean isOneColumnRow(int row) {
+    public boolean isRowOneColumn(int row) {
         return false;
     }
 

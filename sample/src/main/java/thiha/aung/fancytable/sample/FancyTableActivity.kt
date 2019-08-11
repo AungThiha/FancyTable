@@ -11,18 +11,18 @@ class FancyTableActivity : AppCompatActivity() {
 
     companion object {
 
-        const val NUM_DOCKED_ROWS = "NUM_DOCKED_ROWS"
-        const val NUM_DOCKED_COLUMNS = "NUM_DOCKED_COLUMNS"
+        const val DOCKED_ROW_COUNT = "DOCKED_ROW_COUNT"
+        const val DOCKED_COLUMN_COUNT = "DOCKED_COLUMN_COUNT"
         const val ENABLE_ONE_COLUMN_ROWS = "ENABLE_ONE_COLUMN_ROWS"
 
         fun createIntent(
             context: Context,
-            numberDockedRows: Int,
-            numberDockedCols: Int,
+            dockedRowCount: Int,
+            dockedColumnCount: Int,
             enableOneColRows: Boolean
         ) = Intent(context, FancyTableActivity::class.java).apply {
-            putExtra(NUM_DOCKED_ROWS, numberDockedRows)
-            putExtra(NUM_DOCKED_COLUMNS, numberDockedCols)
+            putExtra(DOCKED_ROW_COUNT, dockedRowCount)
+            putExtra(DOCKED_COLUMN_COUNT, dockedColumnCount)
             putExtra(ENABLE_ONE_COLUMN_ROWS, enableOneColRows)
         }
 
@@ -40,8 +40,8 @@ class FancyTableActivity : AppCompatActivity() {
         with(intent) {
             tbl.adapter = FancyTableAdapter(
                 this@FancyTableActivity,
-                getIntExtra(NUM_DOCKED_ROWS, 0),
-                getIntExtra(NUM_DOCKED_COLUMNS, 0),
+                getIntExtra(DOCKED_ROW_COUNT, 0),
+                getIntExtra(DOCKED_COLUMN_COUNT, 0),
                 getBooleanExtra(ENABLE_ONE_COLUMN_ROWS, false)
             )
         }

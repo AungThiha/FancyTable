@@ -24,9 +24,9 @@ class MainActivity : AppCompatActivity() {
         btnOpenTable.setOnClickListener {
             startActivity(FancyTableActivity.createIntent(
                 this,
-                numberDockedRows.value,
-                numberDockedColumns.value,
-                oneColumnRows.isChecked
+                dockedRowCount.value,
+                dockedColumnCount.value,
+                rowOneColumn.isChecked
             ))
         }
     }
