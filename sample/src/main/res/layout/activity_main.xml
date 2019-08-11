@@ -48,7 +48,35 @@
             android:text="@string/open_table"
             app:layout_constraintTop_toBottomOf="@id/labelOneColumnRows"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/description"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_standard"
+            android:paddingStart="@dimen/padding_description"
+            android:paddingEnd="@dimen/padding_description"
+            android:gravity="center"
+            android:text="@string/description"
+            app:layout_constraintTop_toBottomOf="@id/btnOpenTable"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+            android:id="@+id/github"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_standard"
+            android:paddingStart="@dimen/padding_description"
+            android:paddingEnd="@dimen/padding_description"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"
+            android:text="@string/github_link"
+            app:layout_constraintTop_toBottomOf="@id/description"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
     <com.travijuu.numberpicker.library.NumberPicker

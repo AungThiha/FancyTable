@@ -5,4 +5,9 @@
     <string name="one_col_rows">One-column rows :</string>
     <string name="number_of_docked_cols">Number of docked columns :</string>
     <string name="number_of_docked_rows">Number of docked rows :</string>
+    <string name="github_link">Github Link</string>
+    <string name="description">For the purpose of demonstration, one-column rows will be at row indexes that are
+        dividable by 5 when enabled in this app. One-column rows can be adjusted to appear at any index when you use the
+        library in your own app.
+    </string>
 </resources>

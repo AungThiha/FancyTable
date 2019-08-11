@@ -77,6 +77,10 @@ class FancyTableAdapter(
         view.findViewById<View>(R.id.divider).visibility =
             if (row < numDockedRows) View.GONE else View.VISIBLE
 
+        view.setBackgroundResource(
+            if (column < numDockedColumns) R.color.colorAccent else android.R.color.white
+        )
+
         val text = "${row}x$column"
         view.findViewById<TextView>(android.R.id.text1).text = text
 

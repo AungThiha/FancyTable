@@ -5,6 +5,7 @@
     <dimen name="margin_standard">20dp</dimen>
 
     <dimen name="padding_button">40dp</dimen>
+    <dimen name="padding_description">40dp</dimen>
 
     <dimen name="first_column_padding_vertical">4dp</dimen>
     <dimen name="first_column_padding_start">16dp</dimen>
