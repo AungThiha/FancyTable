@@ -35,14 +35,26 @@ class FancyTableAdapter(
 
     override fun getNumDockedColumns() = numDockedColumns
 
+    /*
+    add one-column rows at row indexes that are dividable by 5
+    * */
     override fun isOneColumnRow(row: Int): Boolean {
         return if (enableOneColumnRows) row % 5 == 0 else false
     }
 
     override fun isRowShadowShown() = true
 
+    /*
+    it looks ugly to see a shadow in the middle of one-column row
+    That's why this is disabled when one-column rows is enabled
+    * */
     override fun isColumnShadowShown() = !enableOneColumnRows
 
+    /*
+    Important: All views need to have a background. The background cannot be transparent
+    If it's transparent, the views scrolled to the under of docked area will be overlapping with
+    views in the docked area
+    * */
     override fun getView(row: Int, column: Int, convertView: View?, parent: ViewGroup): View {
         return when (getItemViewType(row, column)) {
             TYPE_NORMAL -> {

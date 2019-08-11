@@ -78,6 +78,9 @@ public interface FancyTableAdapter {
      * Get a View that displays the data at the specified row and column in the
      * data table. You can either create a View manually or inflate it from an
      * XML layout file.
+     * Important: All views need to have a background. The background cannot be transparent
+     * If it's transparent, the views scrolled to the under of docked area will be overlapping with
+     * views in the docked area
      *
      * @param row The row of the item within the adapter's data table of the
      * @param column The column of the item within the adapter's data table of the
