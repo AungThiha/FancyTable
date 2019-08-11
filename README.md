@@ -13,14 +13,14 @@ Note that this is added inside `allprojects`, not inside `buildscript`
 allprojects {
   repositories {
     ...
-    maven { url 'https://jitpack.io' }
+    jcenter()
   }
 }
 ```
 ### Add the dependency
 ```groovy
 dependencies {
-  implementation 'com.github.AungThiha:FancyTable:1.0.0'
+  implementation 'thiha.aung.fancytable:fancytable:1.0.0'
 }
 ```
 ### Declare FancyTable in a layout file
