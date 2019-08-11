@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sample</string>
+    <string name="app_name">Fancy Table</string>
 
     <string name="open_table">Open Table</string>
     <string name="one_col_rows">One-column rows :</string>
