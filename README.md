@@ -3,10 +3,12 @@
 An android library
 
 ### Features
-1. Both both vertically and horizontally scrollable
+1. Both vertically and horizontally scrollable
 2. Adjustable numbers of docked/fixed rows and columns
 3. Ability to add rows that fill the width of the parent so that they look like headers and make the table look like it has multiple sub-tables within
-4. Ability to disable and enable all of the above
+4. Shadows under the horizontal docked area and vertical docked area
+5. Ability to disable and enable all of the above
+6. Recycling of views
 
 <img src="https://media.giphy.com/media/f6E5vnYcMz0KZBdJLz/giphy.gif" width="320" alt="Demo Gif"/>
 
